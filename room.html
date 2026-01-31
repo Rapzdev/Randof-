@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pendaftaran Grup WhatsApp</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .banner {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .profile-image {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid #25D366;
+            margin-bottom: 15px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #25D366;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #25D366;
+            border-bottom: 2px solid rgba(37, 211, 102, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .form-group label .required {
+            color: #f44336;
+        }
+
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus,
+        .form-group select:focus {
+            outline: none;
+            border-color: #25D366;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .form-group input:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .checkbox-group {
+            margin-bottom: 10px;
+        }
+
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            cursor: pointer;
+        }
+
+        .checkbox-group input[type="checkbox"],
+        .checkbox-group input[type="radio"] {
+            width: auto;
+            margin-right: 10px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+            margin-top: 10px;
+        }
+
+        .btn:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .btn-location {
+            background: #2196F3;
+            margin-bottom: 10px;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #81c784;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .success h3 {
+            margin-bottom: 10px;
+            color: #4CAF50;
+        }
+
+        .info {
+            background: rgba(33, 150, 243, 0.2);
+            border: 1px solid #2196F3;
+            color: #64B5F6;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #aaa;
+        }
+
+        .loading::after {
+            content: '...';
+            animation: dots 1.5s infinite;
+        }
+
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+
+        .location-info {
+            background: rgba(33, 150, 243, 0.1);
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .retry-info {
+            background: rgba(255, 152, 0, 0.2);
+            border: 1px solid #FF9800;
+            color: #FFB74D;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.5em;
+            }
+
+            .banner {
+                height: 150px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="mainContainer">
+        <div class="loading" id="loadingDiv">Memuat formulir pendaftaran</div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, get, push, set, update } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxZYKx7v-GhuprsLqF3h2Hvl5fdr8fZj0",
+            authDomain: "randof-188ea.firebaseapp.com",
+            databaseURL: "https://randof-188ea-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "randof-188ea",
+            storageBucket: "randof-188ea.firebasestorage.app",
+            messagingSenderId: "757496617955",
+            appId: "1:757496617955:web:f46978edfa85460bf65ed6",
+            measurementId: "G-BSTNHPL2B3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomId = urlParams.get('id');
+
+        let roomData = null;
+        let userLocation = null;
+
+        if (!roomId) {
+            document.getElementById('mainContainer').innerHTML = `
+                <div class="error">
+                    <h3>Error!</h3>
+                    <p>Room ID tidak ditemukan. Link yang Anda gunakan mungkin tidak valid.</p>
+                </div>
+            `;
+        } else {
+            loadRoom();
+        }
+
+        async function loadRoom() {
+            try {
+                const roomRef = ref(database, 'rooms/' + roomId);
+                const snapshot = await get(roomRef);
+
+                if (!snapshot.exists()) {
+                    document.getElementById('mainContainer').innerHTML = `
+                        <div class="error">
+                            <h3>Room Tidak Ditemukan!</h3>
+                            <p>Room pendaftaran ini tidak ada atau telah dihapus.</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                roomData = snapshot.val();
+                renderRegistrationForm();
+            } catch (error) {
+                document.getElementById('mainContainer').innerHTML = `
+                    <div class="error">
+                        <h3>Error!</h3>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+            }
+        }
+
+        function renderRegistrationForm() {
+            const container = document.getElementById('mainContainer');
+            let html = '';
+
+            // Banner
+            if (roomData.bannerImage) {
+                html += `<img src="${roomData.bannerImage}" alt="Banner" class="banner">`;
+            }
+
+            // Header
+            html += `
+                <div class="header">
+                    ${roomData.profileImage ? `<img src="${roomData.profileImage}" alt="Profile" class="profile-image">` : ''}
+                    <h1>${roomData.name || 'Pendaftaran Grup'}</h1>
+                    <p>${roomData.description || ''}</p>
+                </div>
+            `;
+
+            // Info
+            if (roomData.settings && roomData.settings.autoApprove) {
+                html += `
+                    <div class="info">
+                        <strong>ℹ️ Mode Auto Approve</strong><br>
+                        Anda akan otomatis dimasukkan ke grup jika menjawab minimal ${roomData.settings.minCorrectAnswers} pertanyaan dengan benar.
+                    </div>
+                `;
+            } else {
+                html += `
+                    <div class="info">
+                        <strong>ℹ️ Persetujuan Manual</strong><br>
+                        Pendaftaran Anda akan ditinjau oleh admin sebelum diterima.
+                    </div>
+                `;
+            }
+
+            // Form
+            html += `
+                <div class="card">
+                    <h2>📋 Formulir Pendaftaran</h2>
+                    <div id="errorMessage"></div>
+                    <form id="registrationForm" onsubmit="submitForm(event)">
+            `;
+
+            // Username (Required)
+            html += `
+                <div class="form-group">
+                    <label>Username <span class="required">*</span></label>
+                    <input type="text" id="username" required placeholder="Masukkan username Anda">
+                </div>
+            `;
+
+            // Age (Required with validation)
+            html += `
+                <div class="form-group">
+                    <label>Umur <span class="required">*</span></label>
+                    <input type="number" id="age" required min="${roomData.settings?.minAge || 13}" max="${roomData.settings?.maxAge || 100}" 
+                           placeholder="Umur Anda (${roomData.settings?.minAge || 13}-${roomData.settings?.maxAge || 100})">
+                    <small style="color: #aaa;">Batas umur: ${roomData.settings?.minAge || 13} - ${roomData.settings?.maxAge || 100} tahun</small>
+                </div>
+            `;
+
+            // Location (Required if enabled)
+            if (roomData.settings?.requireLocation !== false) {
+                html += `
+                    <div class="form-group">
+                        <label>Lokasi <span class="required">*</span></label>
+                        <button type="button" class="btn btn-location" onclick="getLocation()">
+                            📍 Izinkan Akses Lokasi
+                        </button>
+                        <input type="text" id="location" required readonly placeholder="Klik tombol di atas untuk mendapatkan lokasi">
+                        <div id="locationInfo" class="location-info" style="display: none;"></div>
+                        <small style="color: #aaa;">Lokasi diperlukan untuk validasi. Browser akan meminta izin akses lokasi Anda.</small>
+                    </div>
+                `;
+            }
+
+            // Custom Questions
+            if (roomData.questions && roomData.questions.length > 0) {
+                roomData.questions.forEach((question, index) => {
+                    html += renderQuestion(question, index);
+                });
+            }
+
+            // Submit Button
+            html += `
+                    <button type="submit" class="btn" id="submitBtn">
+                        📤 Kirim Pendaftaran
+                    </button>
+                </form>
+            </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        function renderQuestion(question, index) {
+            let html = `<div class="form-group">`;
+            html += `<label>${question.text} ${question.required ? '<span class="required">*</span>' : ''}</label>`;
+
+            switch (question.type) {
+                case 'text':
+                    html += `<textarea id="question_${index}" ${question.required ? 'required' : ''} rows="3"></textarea>`;
+                    break;
+
+                case 'multiple':
+                case 'radio':
+                    if (question.options) {
+                        question.options.forEach((option, optIndex) => {
+                            html += `
+                                <div class="checkbox-group">
+                                    <label>
+                                        <input type="radio" name="question_${index}" value="${option}" ${question.required ? 'required' : ''}>
+                                        ${option}
+                                    </label>
+                                </div>
+                            `;
+                        });
+                    }
+                    break;
+
+                case 'checkbox':
+                    if (question.options) {
+                        question.options.forEach((option, optIndex) => {
+                            html += `
+                                <div class="checkbox-group">
+                                    <label>
+                                        <input type="checkbox" name="question_${index}" value="${option}">
+                                        ${option}
+                                    </label>
+                                </div>
+                            `;
+                        });
+                    }
+                    break;
+
+                case 'dropdown':
+                    html += `<select id="question_${index}" ${question.required ? 'required' : ''}>`;
+                    html += `<option value="">-- Pilih --</option>`;
+                    if (question.options) {
+                        question.options.forEach(option => {
+                            html += `<option value="${option}">${option}</option>`;
+                        });
+                    }
+                    html += `</select>`;
+                    break;
+            }
+
+            html += `</div>`;
+            return html;
+        }
+
+        window.getLocation = function() {
+            if (!navigator.geolocation) {
+                showError('Browser Anda tidak mendukung geolokasi.');
+                return;
+            }
+
+            const btn = event.target;
+            btn.disabled = true;
+            btn.textContent = '⏳ Mendapatkan lokasi...';
+
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    userLocation = {
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy
+                    };
+
+                    // Use reverse geocoding to get address (simplified)
+                    const locationString = `${position.coords.latitude.toFixed(6)}, ${position.coords.longitude.toFixed(6)}`;
+                    document.getElementById('location').value = locationString;
+                    
+                    const locationInfo = document.getElementById('locationInfo');
+                    locationInfo.style.display = 'block';
+                    locationInfo.innerHTML = `
+                        ✅ Lokasi berhasil didapatkan!<br>
+                        📍 Koordinat: ${locationString}<br>
+                        🎯 Akurasi: ${position.coords.accuracy.toFixed(0)} meter
+                    `;
+
+                    btn.textContent = '✅ Lokasi Terdeteksi';
+                    btn.style.background = '#4CAF50';
+                },
+                (error) => {
+                    btn.disabled = false;
+                    btn.textContent = '📍 Izinkan Akses Lokasi';
+                    
+                    let errorMsg = 'Gagal mendapatkan lokasi. ';
+                    switch(error.code) {
+                        case error.PERMISSION_DENIED:
+                            errorMsg += 'Anda menolak izin akses lokasi. Silakan izinkan akses lokasi di pengaturan browser.';
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            errorMsg += 'Informasi lokasi tidak tersedia.';
+                            break;
+                        case error.TIMEOUT:
+                            errorMsg += 'Permintaan lokasi timeout.';
+                            break;
+                    }
+                    showError(errorMsg);
+                }
+            );
+        }
+
+        window.submitForm = async function(event) {
+            event.preventDefault();
+            
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Mengirim...';
+
+            try {
+                // Collect answers
+                const answers = {
+                    'Username': document.getElementById('username').value,
+                    'Umur': document.getElementById('age').value
+                };
+
+                if (roomData.settings?.requireLocation !== false) {
+                    answers['Lokasi'] = document.getElementById('location').value;
+                }
+
+                // Collect custom question answers
+                let correctAnswers = 0;
+                if (roomData.questions) {
+                    roomData.questions.forEach((question, index) => {
+                        let answer = '';
+                        
+                        if (question.type === 'checkbox') {
+                            const checkboxes = document.querySelectorAll(`input[name="question_${index}"]:checked`);
+                            answer = Array.from(checkboxes).map(cb => cb.value).join(', ');
+                        } else if (question.type === 'multiple' || question.type === 'radio') {
+                            const radio = document.querySelector(`input[name="question_${index}"]:checked`);
+                            answer = radio ? radio.value : '';
+                        } else {
+                            const input = document.getElementById(`question_${index}`);
+                            answer = input ? input.value : '';
+                        }
+
+                        answers[question.text] = answer;
+
+                        // Check if answer is correct (for auto-approve)
+                        if (question.correctAnswer) {
+                            const correctAns = question.correctAnswer.toLowerCase().trim();
+                            const userAns = answer.toLowerCase().trim();
+                            if (correctAns === userAns) {
+                                correctAnswers++;
+                            }
+                        }
+                    });
+                }
+
+                // Create applicant record
+                const applicantData = {
+                    answers: answers,
+                    location: userLocation,
+                    timestamp: Date.now(),
+                    status: 'pending'
+                };
+
+                // Check auto-approve conditions
+                if (roomData.settings?.autoApprove) {
+                    const minCorrect = roomData.settings.minCorrectAnswers || 3;
+                    if (correctAnswers >= minCorrect) {
+                        applicantData.status = 'approved';
+                        applicantData.autoApproved = true;
+                        applicantData.approvedAt = Date.now();
+                    }
+                }
+
+                // Save to database
+                const applicantsRef = ref(database, 'applicants/' + roomId);
+                const newApplicantRef = push(applicantsRef);
+                await set(newApplicantRef, applicantData);
+
+                // Show success message
+                if (applicantData.status === 'approved') {
+                    showSuccess(true);
+                } else {
+                    showSuccess(false);
+                }
+
+            } catch (error) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = '📤 Kirim Pendaftaran';
+                showError('Terjadi kesalahan: ' + error.message);
+            }
+        }
+
+        function showSuccess(autoApproved) {
+            const container = document.getElementById('mainContainer');
+            
+            let message = '';
+            if (autoApproved) {
+                message = `
+                    <div class="success">
+                        <h3>🎉 Selamat! Anda Diterima!</h3>
+                        <p>Pendaftaran Anda telah disetujui secara otomatis.</p>
+                        <p style="margin-top: 15px;">
+                            <a href="${roomData.whatsappLink}" class="btn" target="_blank">
+                                💬 Gabung ke Grup WhatsApp
+                            </a>
+                        </p>
+                    </div>
+                `;
+            } else {
+                message = `
+                    <div class="success">
+                        <h3>✅ Pendaftaran Berhasil!</h3>
+                        <p>Terima kasih telah mendaftar. Admin akan meninjau pendaftaran Anda.</p>
+                        <p>Anda akan dihubungi jika pendaftaran disetujui.</p>
+                    </div>
+                `;
+            }
+
+            container.innerHTML = `
+                <div class="header">
+                    ${roomData.profileImage ? `<img src="${roomData.profileImage}" alt="Profile" class="profile-image">` : ''}
+                    <h1>${roomData.name || 'Pendaftaran Grup'}</h1>
+                </div>
+                ${message}
+            `;
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.className = 'error';
+            errorDiv.innerHTML = `<strong>⚠️ Error!</strong><br>${message}`;
+            errorDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>

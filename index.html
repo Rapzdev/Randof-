@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WhatsApp Group Registration System</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding: 30px 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .header p {
+            color: #aaa;
+            font-size: 1.1em;
+        }
+
+        .developer {
+            text-align: center;
+            color: #666;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #25D366;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #25D366;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .input-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            font-weight: 600;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .rooms-list {
+            margin-top: 40px;
+        }
+
+        .room-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.3s ease;
+        }
+
+        .room-item:hover {
+            background: rgba(255, 255, 255, 0.08);
+            transform: translateX(5px);
+        }
+
+        .room-info h3 {
+            color: #25D366;
+            margin-bottom: 5px;
+        }
+
+        .room-info p {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .room-actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-small {
+            padding: 8px 15px;
+            font-size: 0.9em;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn-edit {
+            background: #4CAF50;
+            color: white;
+        }
+
+        .btn-view {
+            background: #2196F3;
+            color: white;
+        }
+
+        .btn-delete {
+            background: #f44336;
+            color: white;
+        }
+
+        .btn-small:hover {
+            transform: scale(1.05);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 20px;
+            color: #aaa;
+        }
+
+        .error {
+            background: rgba(244, 67, 54, 0.2);
+            border: 1px solid #f44336;
+            color: #ff6b6b;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .success {
+            background: rgba(76, 175, 80, 0.2);
+            border: 1px solid #4CAF50;
+            color: #81c784;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .room-item {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+            .room-actions {
+                width: 100%;
+            }
+
+            .btn-small {
+                flex: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🔐 WhatsApp Group Registration</h1>
+            <p>Sistem Pendaftaran Grup WhatsApp Profesional</p>
+            <div class="developer">Developed by rapzz</div>
+        </div>
+
+        <div class="card">
+            <h2>Buat Room Pendaftaran Baru</h2>
+            <div id="message"></div>
+            
+            <div class="input-group">
+                <label>Nama Room/Grup</label>
+                <input type="text" id="roomName" placeholder="Contoh: Komunitas Developer Indonesia" required>
+            </div>
+
+            <div class="input-group">
+                <label>Deskripsi Room</label>
+                <textarea id="roomDesc" placeholder="Jelaskan tentang grup WhatsApp Anda..."></textarea>
+            </div>
+
+            <div class="input-group">
+                <label>Link Grup WhatsApp</label>
+                <input type="url" id="whatsappLink" placeholder="https://chat.whatsapp.com/..." required>
+            </div>
+
+            <button class="btn" id="createRoomBtn" onclick="createRoom()">
+                Buat Room Pendaftaran
+            </button>
+        </div>
+
+        <div class="rooms-list">
+            <h2 style="color: #25D366; margin-bottom: 20px;">Room Pendaftaran Anda</h2>
+            <div id="roomsList">
+                <div class="loading">Memuat data room...</div>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, push, onValue, remove } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxZYKx7v-GhuprsLqF3h2Hvl5fdr8fZj0",
+            authDomain: "randof-188ea.firebaseapp.com",
+            databaseURL: "https://randof-188ea-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "randof-188ea",
+            storageBucket: "randof-188ea.firebasestorage.app",
+            messagingSenderId: "757496617955",
+            appId: "1:757496617955:web:f46978edfa85460bf65ed6",
+            measurementId: "G-BSTNHPL2B3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        window.db = database;
+
+        // Load rooms
+        loadRooms();
+
+        function loadRooms() {
+            const roomsRef = ref(database, 'rooms');
+            onValue(roomsRef, (snapshot) => {
+                const roomsList = document.getElementById('roomsList');
+                roomsList.innerHTML = '';
+
+                if (snapshot.exists()) {
+                    const rooms = snapshot.val();
+                    Object.keys(rooms).forEach(roomId => {
+                        const room = rooms[roomId];
+                        const roomItem = createRoomItem(roomId, room);
+                        roomsList.appendChild(roomItem);
+                    });
+                } else {
+                    roomsList.innerHTML = '<div class="loading">Belum ada room. Buat room pertama Anda!</div>';
+                }
+            });
+        }
+
+        function createRoomItem(roomId, room) {
+            const div = document.createElement('div');
+            div.className = 'room-item';
+            div.innerHTML = `
+                <div class="room-info">
+                    <h3>${room.name || 'Untitled Room'}</h3>
+                    <p>${room.description || 'Tidak ada deskripsi'}</p>
+                    <p style="font-size: 0.8em; color: #666;">Dibuat: ${new Date(room.createdAt).toLocaleString('id-ID')}</p>
+                </div>
+                <div class="room-actions">
+                    <a href="roomset.html?id=${roomId}" class="btn-small btn-edit">⚙️ Setting</a>
+                    <a href="room.html?id=${roomId}" class="btn-small btn-view" target="_blank">👁️ Lihat</a>
+                    <button class="btn-small btn-delete" onclick="deleteRoom('${roomId}')">🗑️ Hapus</button>
+                </div>
+            `;
+            return div;
+        }
+
+        window.deleteRoom = function(roomId) {
+            if (confirm('Apakah Anda yakin ingin menghapus room ini?')) {
+                const roomRef = ref(database, 'rooms/' + roomId);
+                remove(roomRef).then(() => {
+                    showMessage('Room berhasil dihapus!', 'success');
+                }).catch((error) => {
+                    showMessage('Error menghapus room: ' + error.message, 'error');
+                });
+            }
+        }
+
+        window.createRoom = function() {
+            const roomName = document.getElementById('roomName').value.trim();
+            const roomDesc = document.getElementById('roomDesc').value.trim();
+            const whatsappLink = document.getElementById('whatsappLink').value.trim();
+
+            if (!roomName) {
+                showMessage('Nama room harus diisi!', 'error');
+                return;
+            }
+
+            if (!whatsappLink) {
+                showMessage('Link WhatsApp harus diisi!', 'error');
+                return;
+            }
+
+            const roomsRef = ref(database, 'rooms');
+            const newRoomRef = push(roomsRef);
+
+            const roomData = {
+                name: roomName,
+                description: roomDesc,
+                whatsappLink: whatsappLink,
+                createdAt: Date.now(),
+                settings: {
+                    autoApprove: false,
+                    minAge: 13,
+                    maxAge: 100,
+                    requireLocation: true,
+                    minCorrectAnswers: 3
+                },
+                questions: [],
+                profileImage: '',
+                bannerImage: ''
+            };
+
+            set(newRoomRef, roomData).then(() => {
+                showMessage('Room berhasil dibuat! Silakan setting room Anda.', 'success');
+                document.getElementById('roomName').value = '';
+                document.getElementById('roomDesc').value = '';
+                document.getElementById('whatsappLink').value = '';
+            }).catch((error) => {
+                showMessage('Error membuat room: ' + error.message, 'error');
+            });
+        }
+
+        function showMessage(message, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.className = type;
+            messageDiv.textContent = message;
+            messageDiv.style.display = 'block';
+
+            setTimeout(() => {
+                messageDiv.style.display = 'none';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>

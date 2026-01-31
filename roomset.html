@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setting Room - WhatsApp Registration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+            min-height: 100vh;
+            color: #fff;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 10px;
+            color: #25D366;
+        }
+
+        .back-btn {
+            display: inline-block;
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: #fff;
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 20px;
+            color: #25D366;
+            border-bottom: 2px solid rgba(37, 211, 102, 0.3);
+            padding-bottom: 10px;
+        }
+
+        .input-group {
+            margin-bottom: 20px;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #ddd;
+            font-weight: 500;
+        }
+
+        .input-group input,
+        .input-group textarea,
+        .input-group select {
+            width: 100%;
+            padding: 12px 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1em;
+            transition: all 0.3s ease;
+        }
+
+        .input-group input:focus,
+        .input-group textarea:focus,
+        .input-group select:focus {
+            outline: none;
+            border-color: #25D366;
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .checkbox-group input[type="checkbox"] {
+            width: auto;
+            cursor: pointer;
+        }
+
+        .btn {
+            background: linear-gradient(45deg, #25D366, #128C7E);
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-danger {
+            background: #f44336;
+        }
+
+        .question-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .question-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .question-header h3 {
+            color: #25D366;
+            font-size: 1.1em;
+        }
+
+        .options-container {
+            margin-top: 10px;
+        }
+
+        .option-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            border-radius: 8px;
+            display: none;
+        }
+
+        .image-preview.show {
+            display: block;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            background: #2d2d2d;
+            margin: 50px auto;
+            padding: 30px;
+            border-radius: 15px;
+            max-width: 600px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        .share-link {
+            background: rgba(37, 211, 102, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #25D366;
+            margin-top: 20px;
+        }
+
+        .share-link input {
+            background: transparent;
+            border: none;
+            color: #25D366;
+            width: 100%;
+            font-size: 1em;
+        }
+
+        .notification-badge {
+            background: #f44336;
+            color: white;
+            border-radius: 50%;
+            padding: 5px 10px;
+            font-size: 0.9em;
+            margin-left: 10px;
+        }
+
+        .applicant-item {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .applicant-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .applicant-info {
+            flex: 1;
+        }
+
+        .applicant-info h4 {
+            color: #25D366;
+            margin-bottom: 5px;
+        }
+
+        .applicant-info p {
+            color: #aaa;
+            font-size: 0.9em;
+        }
+
+        .applicant-answers {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 10px;
+        }
+
+        .answer-item {
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .answer-item:last-child {
+            border-bottom: none;
+        }
+
+        .answer-question {
+            color: #25D366;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+
+        .answer-text {
+            color: #fff;
+        }
+
+        @media (max-width: 768px) {
+            .question-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="index.html" class="back-btn">← Kembali ke Dashboard</a>
+
+        <div class="header">
+            <h1>⚙️ Setting Room Pendaftaran</h1>
+            <p id="roomTitle">Loading...</p>
+        </div>
+
+        <!-- Profile Setting -->
+        <div class="card">
+            <h2>🎨 Profile Room</h2>
+            <div class="input-group">
+                <label>Nama Room</label>
+                <input type="text" id="roomName" placeholder="Nama grup WhatsApp">
+            </div>
+            <div class="input-group">
+                <label>Deskripsi Room</label>
+                <textarea id="roomDesc" rows="3" placeholder="Deskripsi grup"></textarea>
+            </div>
+            <div class="input-group">
+                <label>Link Grup WhatsApp</label>
+                <input type="url" id="whatsappLink" placeholder="https://chat.whatsapp.com/...">
+            </div>
+            <div class="input-group">
+                <label>URL Gambar Profile</label>
+                <input type="url" id="profileImage" placeholder="https://example.com/profile.jpg">
+                <img id="profilePreview" class="image-preview" alt="Profile Preview">
+            </div>
+            <div class="input-group">
+                <label>URL Banner/Cover</label>
+                <input type="url" id="bannerImage" placeholder="https://example.com/banner.jpg">
+                <img id="bannerPreview" class="image-preview" alt="Banner Preview">
+            </div>
+            <button class="btn" onclick="saveProfile()">💾 Simpan Profile</button>
+        </div>
+
+        <!-- General Settings -->
+        <div class="card">
+            <h2>🔧 Pengaturan Umum</h2>
+            
+            <div class="checkbox-group">
+                <input type="checkbox" id="autoApprove">
+                <label for="autoApprove">Auto Approve (Otomatis masukkan anggota)</label>
+            </div>
+
+            <div id="autoApproveSettings" style="display: none;">
+                <div class="input-group">
+                    <label>Minimal Jawaban Benar untuk Auto Approve</label>
+                    <input type="number" id="minCorrectAnswers" min="1" max="10" value="3">
+                    <small style="color: #aaa;">Anggota harus menjawab minimal sejumlah ini pertanyaan dengan benar</small>
+                </div>
+            </div>
+
+            <div class="input-group">
+                <label>Batas Umur Minimal</label>
+                <input type="number" id="minAge" min="1" max="100" value="13">
+            </div>
+
+            <div class="input-group">
+                <label>Batas Umur Maksimal</label>
+                <input type="number" id="maxAge" min="1" max="150" value="100">
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="requireLocation" checked>
+                <label for="requireLocation">Wajibkan Akses Lokasi (untuk validasi)</label>
+            </div>
+
+            <button class="btn" onclick="saveSettings()">💾 Simpan Pengaturan</button>
+        </div>
+
+        <!-- Questions Management -->
+        <div class="card">
+            <h2>❓ Kelola Pertanyaan (Max 10)</h2>
+            <p style="color: #aaa; margin-bottom: 20px;">Pertanyaan Username, Umur, dan Lokasi sudah otomatis ditambahkan.</p>
+            
+            <div id="questionsList"></div>
+
+            <button class="btn" onclick="openQuestionModal()" id="addQuestionBtn">➕ Tambah Pertanyaan</button>
+        </div>
+
+        <!-- Applicants Management -->
+        <div class="card">
+            <h2>
+                👥 Daftar Pendaftar
+                <span class="notification-badge" id="applicantCount">0</span>
+            </h2>
+            <div id="applicantsList">
+                <p style="color: #aaa;">Belum ada pendaftar.</p>
+            </div>
+        </div>
+
+        <!-- Share Link -->
+        <div class="card">
+            <h2>🔗 Link Pendaftaran</h2>
+            <p style="color: #aaa; margin-bottom: 15px;">Bagikan link ini untuk mengundang orang mendaftar:</p>
+            <div class="share-link">
+                <input type="text" id="shareLink" readonly>
+            </div>
+            <button class="btn" onclick="copyLink()" style="margin-top: 15px;">📋 Salin Link</button>
+        </div>
+    </div>
+
+    <!-- Modal Add/Edit Question -->
+    <div id="questionModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeQuestionModal()">&times;</span>
+            <h2 id="modalTitle">Tambah Pertanyaan</h2>
+            
+            <div class="input-group">
+                <label>Teks Pertanyaan</label>
+                <input type="text" id="questionText" placeholder="Masukkan pertanyaan">
+            </div>
+
+            <div class="input-group">
+                <label>Jenis Pertanyaan</label>
+                <select id="questionType" onchange="handleQuestionTypeChange()">
+                    <option value="text">Subjektif (Text)</option>
+                    <option value="multiple">Pilihan Ganda (Multiple Choice)</option>
+                    <option value="checkbox">Checkbox (Multiple Select)</option>
+                    <option value="radio">Radio Button</option>
+                    <option value="dropdown">Dropdown</option>
+                </select>
+            </div>
+
+            <div id="optionsSection" style="display: none;">
+                <label>Opsi Jawaban</label>
+                <div id="optionsList"></div>
+                <button class="btn btn-secondary" onclick="addOption()">➕ Tambah Opsi</button>
+            </div>
+
+            <div class="input-group">
+                <label>Jawaban yang Benar (untuk auto approve)</label>
+                <input type="text" id="correctAnswer" placeholder="Isi jawaban yang benar">
+                <small style="color: #aaa;">Kosongkan jika tidak ada jawaban benar/salah</small>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="questionRequired" checked>
+                <label for="questionRequired">Pertanyaan Wajib</label>
+            </div>
+
+            <button class="btn" onclick="saveQuestion()">💾 Simpan Pertanyaan</button>
+        </div>
+    </div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getDatabase, ref, set, onValue, update, remove, get } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyCxZYKx7v-GhuprsLqF3h2Hvl5fdr8fZj0",
+            authDomain: "randof-188ea.firebaseapp.com",
+            databaseURL: "https://randof-188ea-default-rtdb.asia-southeast1.firebasedatabase.app/",
+            projectId: "randof-188ea",
+            storageBucket: "randof-188ea.firebasestorage.app",
+            messagingSenderId: "757496617955",
+            appId: "1:757496617955:web:f46978edfa85460bf65ed6",
+            measurementId: "G-BSTNHPL2B3"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const roomId = urlParams.get('id');
+
+        window.roomId = roomId;
+        window.db = database;
+        window.currentEditingQuestion = null;
+        window.optionCounter = 0;
+
+        if (!roomId) {
+            alert('Room ID tidak ditemukan!');
+            window.location.href = 'index.html';
+        }
+
+        // Set share link
+        document.getElementById('shareLink').value = window.location.origin + '/room.html?id=' + roomId;
+
+        // Load room data
+        loadRoomData();
+        loadApplicants();
+
+        function loadRoomData() {
+            const roomRef = ref(database, 'rooms/' + roomId);
+            onValue(roomRef, (snapshot) => {
+                if (snapshot.exists()) {
+                    const room = snapshot.val();
+                    
+                    // Load profile
+                    document.getElementById('roomTitle').textContent = room.name || 'Untitled Room';
+                    document.getElementById('roomName').value = room.name || '';
+                    document.getElementById('roomDesc').value = room.description || '';
+                    document.getElementById('whatsappLink').value = room.whatsappLink || '';
+                    document.getElementById('profileImage').value = room.profileImage || '';
+                    document.getElementById('bannerImage').value = room.bannerImage || '';
+                    
+                    if (room.profileImage) {
+                        document.getElementById('profilePreview').src = room.profileImage;
+                        document.getElementById('profilePreview').classList.add('show');
+                    }
+                    if (room.bannerImage) {
+                        document.getElementById('bannerPreview').src = room.bannerImage;
+                        document.getElementById('bannerPreview').classList.add('show');
+                    }
+
+                    // Load settings
+                    if (room.settings) {
+                        document.getElementById('autoApprove').checked = room.settings.autoApprove || false;
+                        document.getElementById('minAge').value = room.settings.minAge || 13;
+                        document.getElementById('maxAge').value = room.settings.maxAge || 100;
+                        document.getElementById('requireLocation').checked = room.settings.requireLocation !== false;
+                        document.getElementById('minCorrectAnswers').value = room.settings.minCorrectAnswers || 3;
+                        
+                        document.getElementById('autoApproveSettings').style.display = 
+                            room.settings.autoApprove ? 'block' : 'none';
+                    }
+
+                    // Load questions
+                    loadQuestions(room.questions || []);
+                }
+            });
+        }
+
+        function loadQuestions(questions) {
+            const questionsList = document.getElementById('questionsList');
+            questionsList.innerHTML = '';
+
+            questions.forEach((q, index) => {
+                const qDiv = document.createElement('div');
+                qDiv.className = 'question-item';
+                
+                let optionsHtml = '';
+                if (q.options && q.options.length > 0) {
+                    optionsHtml = '<div class="options-container"><strong>Opsi:</strong>';
+                    q.options.forEach(opt => {
+                        optionsHtml += `<div class="option-item"><span>${opt}</span></div>`;
+                    });
+                    optionsHtml += '</div>';
+                }
+
+                qDiv.innerHTML = `
+                    <div class="question-header">
+                        <h3>Pertanyaan ${index + 1}</h3>
+                        <div>
+                            <button class="btn btn-secondary" onclick="editQuestion(${index})">✏️ Edit</button>
+                            <button class="btn btn-danger" onclick="deleteQuestion(${index})">🗑️ Hapus</button>
+                        </div>
+                    </div>
+                    <p><strong>Tipe:</strong> ${getQuestionTypeName(q.type)}</p>
+                    <p><strong>Pertanyaan:</strong> ${q.text}</p>
+                    ${optionsHtml}
+                    ${q.correctAnswer ? `<p><strong>Jawaban Benar:</strong> ${q.correctAnswer}</p>` : ''}
+                    <p><strong>Wajib:</strong> ${q.required ? 'Ya' : 'Tidak'}</p>
+                `;
+                questionsList.appendChild(qDiv);
+            });
+
+            // Update button state
+            const addBtn = document.getElementById('addQuestionBtn');
+            if (questions.length >= 10) {
+                addBtn.disabled = true;
+                addBtn.textContent = '❌ Maksimal 10 Pertanyaan Tercapai';
+            } else {
+                addBtn.disabled = false;
+                addBtn.textContent = '➕ Tambah Pertanyaan';
+            }
+        }
+
+        function getQuestionTypeName(type) {
+            const types = {
+                'text': 'Subjektif (Text)',
+                'multiple': 'Pilihan Ganda',
+                'checkbox': 'Checkbox',
+                'radio': 'Radio Button',
+                'dropdown': 'Dropdown'
+            };
+            return types[type] || type;
+        }
+
+        function loadApplicants() {
+            const applicantsRef = ref(database, 'applicants/' + roomId);
+            onValue(applicantsRef, (snapshot) => {
+                const applicantsList = document.getElementById('applicantsList');
+                const applicantCount = document.getElementById('applicantCount');
+                
+                applicantsList.innerHTML = '';
+                
+                if (snapshot.exists()) {
+                    const applicants = snapshot.val();
+                    const applicantsArray = Object.keys(applicants).map(key => ({
+                        id: key,
+                        ...applicants[key]
+                    }));
+                    
+                    applicantCount.textContent = applicantsArray.length;
+                    
+                    applicantsArray.forEach(applicant => {
+                        const appDiv = document.createElement('div');
+                        appDiv.className = 'applicant-item';
+                        
+                        let answersHtml = '';
+                        if (applicant.answers) {
+                            answersHtml = '<div class="applicant-answers">';
+                            Object.keys(applicant.answers).forEach(key => {
+                                answersHtml += `
+                                    <div class="answer-item">
+                                        <div class="answer-question">${key}</div>
+                                        <div class="answer-text">${applicant.answers[key]}</div>
+                                    </div>
+                                `;
+                            });
+                            answersHtml += '</div>';
+                        }
+
+                        const statusColor = applicant.status === 'approved' ? '#4CAF50' : 
+                                          applicant.status === 'rejected' ? '#f44336' : '#FFA500';
+                        
+                        appDiv.innerHTML = `
+                            <div class="applicant-header">
+                                <div class="applicant-info">
+                                    <h4>${applicant.answers?.Username || 'Unknown'}</h4>
+                                    <p>Umur: ${applicant.answers?.Umur || 'N/A'} | Lokasi: ${applicant.answers?.Lokasi || 'N/A'}</p>
+                                    <p>Status: <span style="color: ${statusColor}; font-weight: bold;">${applicant.status || 'pending'}</span></p>
+                                    <p style="font-size: 0.8em; color: #666;">Mendaftar: ${new Date(applicant.timestamp).toLocaleString('id-ID')}</p>
+                                </div>
+                                <div>
+                                    ${applicant.status !== 'approved' ? `<button class="btn" onclick="approveApplicant('${applicant.id}')">✅ Terima</button>` : ''}
+                                    ${applicant.status !== 'rejected' ? `<button class="btn btn-danger" onclick="rejectApplicant('${applicant.id}')">❌ Tolak</button>` : ''}
+                                </div>
+                            </div>
+                            ${answersHtml}
+                        `;
+                        
+                        applicantsList.appendChild(appDiv);
+                    });
+                } else {
+                    applicantCount.textContent = '0';
+                    applicantsList.innerHTML = '<p style="color: #aaa;">Belum ada pendaftar.</p>';
+                }
+            });
+        }
+
+        // Profile image preview
+        document.getElementById('profileImage').addEventListener('input', function() {
+            const preview = document.getElementById('profilePreview');
+            if (this.value) {
+                preview.src = this.value;
+                preview.classList.add('show');
+            } else {
+                preview.classList.remove('show');
+            }
+        });
+
+        document.getElementById('bannerImage').addEventListener('input', function() {
+            const preview = document.getElementById('bannerPreview');
+            if (this.value) {
+                preview.src = this.value;
+                preview.classList.add('show');
+            } else {
+                preview.classList.remove('show');
+            }
+        });
+
+        // Auto approve checkbox handler
+        document.getElementById('autoApprove').addEventListener('change', function() {
+            document.getElementById('autoApproveSettings').style.display = 
+                this.checked ? 'block' : 'none';
+        });
+
+        window.saveProfile = async function() {
+            const updates = {
+                name: document.getElementById('roomName').value,
+                description: document.getElementById('roomDesc').value,
+                whatsappLink: document.getElementById('whatsappLink').value,
+                profileImage: document.getElementById('profileImage').value,
+                bannerImage: document.getElementById('bannerImage').value
+            };
+
+            const roomRef = ref(database, 'rooms/' + roomId);
+            await update(roomRef, updates);
+            alert('Profile berhasil disimpan!');
+        }
+
+        window.saveSettings = async function() {
+            const settings = {
+                autoApprove: document.getElementById('autoApprove').checked,
+                minAge: parseInt(document.getElementById('minAge').value),
+                maxAge: parseInt(document.getElementById('maxAge').value),
+                requireLocation: document.getElementById('requireLocation').checked,
+                minCorrectAnswers: parseInt(document.getElementById('minCorrectAnswers').value)
+            };
+
+            const roomRef = ref(database, 'rooms/' + roomId + '/settings');
+            await set(roomRef, settings);
+            alert('Pengaturan berhasil disimpan!');
+        }
+
+        window.openQuestionModal = function() {
+            window.currentEditingQuestion = null;
+            document.getElementById('modalTitle').textContent = 'Tambah Pertanyaan';
+            document.getElementById('questionText').value = '';
+            document.getElementById('questionType').value = 'text';
+            document.getElementById('correctAnswer').value = '';
+            document.getElementById('questionRequired').checked = true;
+            document.getElementById('optionsSection').style.display = 'none';
+            document.getElementById('questionModal').style.display = 'block';
+        }
+
+        window.closeQuestionModal = function() {
+            document.getElementById('questionModal').style.display = 'none';
+        }
+
+        window.handleQuestionTypeChange = function() {
+            const type = document.getElementById('questionType').value;
+            const optionsSection = document.getElementById('optionsSection');
+            
+            if (['multiple', 'checkbox', 'radio', 'dropdown'].includes(type)) {
+                optionsSection.style.display = 'block';
+                if (document.getElementById('optionsList').children.length === 0) {
+                    addOption();
+                    addOption();
+                }
+            } else {
+                optionsSection.style.display = 'none';
+            }
+        }
+
+        window.addOption = function() {
+            const optionsList = document.getElementById('optionsList');
+            const optionDiv = document.createElement('div');
+            optionDiv.className = 'option-item';
+            optionDiv.innerHTML = `
+                <input type="text" placeholder="Opsi ${window.optionCounter + 1}" style="flex: 1; margin-right: 10px;">
+                <button class="btn btn-danger btn-small" onclick="this.parentElement.remove()">🗑️</button>
+            `;
+            optionsList.appendChild(optionDiv);
+            window.optionCounter++;
+        }
+
+        window.saveQuestion = async function() {
+            const roomRef = ref(database, 'rooms/' + roomId);
+            const snapshot = await get(roomRef);
+            const room = snapshot.val();
+            
+            const questions = room.questions || [];
+            
+            const question = {
+                text: document.getElementById('questionText').value,
+                type: document.getElementById('questionType').value,
+                correctAnswer: document.getElementById('correctAnswer').value,
+                required: document.getElementById('questionRequired').checked,
+                options: []
+            };
+
+            // Get options if applicable
+            const optionInputs = document.querySelectorAll('#optionsList input');
+            optionInputs.forEach(input => {
+                if (input.value.trim()) {
+                    question.options.push(input.value.trim());
+                }
+            });
+
+            if (window.currentEditingQuestion !== null) {
+                questions[window.currentEditingQuestion] = question;
+            } else {
+                if (questions.length >= 10) {
+                    alert('Maksimal 10 pertanyaan!');
+                    return;
+                }
+                questions.push(question);
+            }
+
+            await update(roomRef, { questions });
+            closeQuestionModal();
+            alert('Pertanyaan berhasil disimpan!');
+        }
+
+        window.editQuestion = async function(index) {
+            const roomRef = ref(database, 'rooms/' + roomId);
+            const snapshot = await get(roomRef);
+            const room = snapshot.val();
+            const question = room.questions[index];
+
+            window.currentEditingQuestion = index;
+            document.getElementById('modalTitle').textContent = 'Edit Pertanyaan';
+            document.getElementById('questionText').value = question.text;
+            document.getElementById('questionType').value = question.type;
+            document.getElementById('correctAnswer').value = question.correctAnswer || '';
+            document.getElementById('questionRequired').checked = question.required;
+
+            handleQuestionTypeChange();
+
+            if (question.options && question.options.length > 0) {
+                const optionsList = document.getElementById('optionsList');
+                optionsList.innerHTML = '';
+                question.options.forEach(opt => {
+                    const optionDiv = document.createElement('div');
+                    optionDiv.className = 'option-item';
+                    optionDiv.innerHTML = `
+                        <input type="text" value="${opt}" style="flex: 1; margin-right: 10px;">
+                        <button class="btn btn-danger btn-small" onclick="this.parentElement.remove()">🗑️</button>
+                    `;
+                    optionsList.appendChild(optionDiv);
+                });
+            }
+
+            document.getElementById('questionModal').style.display = 'block';
+        }
+
+        window.deleteQuestion = async function(index) {
+            if (confirm('Hapus pertanyaan ini?')) {
+                const roomRef = ref(database, 'rooms/' + roomId);
+                const snapshot = await get(roomRef);
+                const room = snapshot.val();
+                const questions = room.questions || [];
+                
+                questions.splice(index, 1);
+                await update(roomRef, { questions });
+                alert('Pertanyaan berhasil dihapus!');
+            }
+        }
+
+        window.approveApplicant = async function(applicantId) {
+            const applicantRef = ref(database, 'applicants/' + roomId + '/' + applicantId);
+            const snapshot = await get(applicantRef);
+            const applicant = snapshot.val();
+
+            await update(applicantRef, { 
+                status: 'approved',
+                approvedAt: Date.now()
+            });
+
+            // Get room data
+            const roomRef = ref(database, 'rooms/' + roomId);
+            const roomSnapshot = await get(roomRef);
+            const room = roomSnapshot.val();
+
+            // Prepare message for WhatsApp
+            let message = `🎉 *Pendaftar Baru Diterima!*\n\n`;
+            if (applicant.answers) {
+                Object.keys(applicant.answers).forEach(key => {
+                    message += `*${key}:* ${applicant.answers[key]}\n`;
+                });
+            }
+
+            // Send to WhatsApp group (simulate)
+            alert('Pendaftar disetujui! Dalam implementasi nyata, pesan akan otomatis dikirim ke grup WhatsApp:\n\n' + message);
+        }
+
+        window.rejectApplicant = async function(applicantId) {
+            if (confirm('Tolak pendaftar ini? Mereka bisa mendaftar ulang dalam 5 jam.')) {
+                const applicantRef = ref(database, 'applicants/' + roomId + '/' + applicantId);
+                await update(applicantRef, { 
+                    status: 'rejected',
+                    rejectedAt: Date.now(),
+                    canRetryAt: Date.now() + (5 * 60 * 60 * 1000) // 5 hours
+                });
+                alert('Pendaftar ditolak.');
+            }
+        }
+
+        window.copyLink = function() {
+            const linkInput = document.getElementById('shareLink');
+            linkInput.select();
+            document.execCommand('copy');
+            alert('Link berhasil disalin!');
+        }
+    </script>
+</body>
+</html>
